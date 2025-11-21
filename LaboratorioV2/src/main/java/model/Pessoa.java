@@ -26,6 +26,10 @@ public abstract class Pessoa implements Mostrar, Serializable {
     @Column(name = "dtNasc")
     private LocalDate dtNasc;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private Usuarios usuario;
+
     public Pessoa() {
     }
 
@@ -62,6 +66,15 @@ public abstract class Pessoa implements Mostrar, Serializable {
         this.dtNasc = dtNasc;
     }
 
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
+    }
+    
+    
     @Override
     public String toString() {
         return nome;

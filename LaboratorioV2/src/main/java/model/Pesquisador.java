@@ -12,12 +12,12 @@ public class Pesquisador extends Pessoa {
     @Column(name = "pesq_afiliacao")
     private String afiliacao;
 
-    public Pesquisador() {
-    }
-
     @ManyToOne
     @JoinColumn(name = "proj_id")
     private Projeto projeto;
+
+    public Pesquisador() {
+    }
 
     public String getAreaAtuacao() {
         return areaAtuacao;
