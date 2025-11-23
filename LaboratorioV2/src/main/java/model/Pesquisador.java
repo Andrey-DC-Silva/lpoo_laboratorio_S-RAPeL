@@ -16,6 +16,10 @@ public class Pesquisador extends Pessoa {
     @JoinColumn(name = "proj_id")
     private Projeto projeto;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Usuarios usuario;
+
     public Pesquisador() {
     }
 
@@ -43,18 +47,32 @@ public class Pesquisador extends Pessoa {
         this.projeto = projeto;
     }
 
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
+        if (usuario != null) {
+            usuario.setPesquisador(this);
+        }
+    }
+
     @Override
-    public void mostrarDados() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("---- Dados do Pesquisador ----");
-        System.out.println("ID: " + getId());
-        System.out.println("Nome: " + getNome());
-        System.out.println("CPF: " + getCpf());
-        System.out.println("Data de Nascimento: " + getDtNasc().format(formato));
-        System.out.println("Área de Atuação: " + getAreaAtuacao());
-        System.out.println("Afiliação: " + getAfiliacao());
-        System.out.println("===============================");
+    public String mostrarDados() {
+
+        String texto = "";
+
+        texto += "---- Dados do Pesquisador ----";
+        texto += "ID: " + getId();
+        texto += "Nome: " + getNome();
+        texto += "CPF: " + getCpf();
+        texto += "Data de Nascimento: " + getDtNasc().format(formato);
+        texto += "Área de Atuação: " + getAreaAtuacao();
+        texto += "Afiliação: " + getAfiliacao();
+
+        return texto;
+
     }
 
     @Override

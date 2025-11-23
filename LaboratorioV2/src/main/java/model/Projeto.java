@@ -121,31 +121,40 @@ public class Projeto implements Mostrar, Serializable {
     }
 
     @Override
-    public void mostrarDados() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("---- Dados do Projeto ----");
-        System.out.println("Titulo: " + titulo);
-        System.out.println("Descrição: " + descricao);
-        System.out.println("Início: " + dtInicio.format(formato));
-        System.out.println("Fim: " + dtFim.format(formato));
-        System.out.println("Status: " + status);
+    public String mostrarDados() {
 
-        System.out.println("Pesquisadores envolvidos:");
-        for (Pesquisador p : pesquisadores) {
-            System.out.println(" - ID:" + p.getId() + ", Nome: " + p.getNome());
-        }
+        String texto = "";
 
-        System.out.println("Experimentos relacionados:");
-        if (experimentos.isEmpty()) {
-            System.out.println(" Nenhum experimento associado.");
+        texto += "---- Dados do Projeto ----\n";
+        texto += "ID: " + id + "\n";
+        texto += "Título: " + titulo + "\n";
+        texto += "Descrição: " + descricao + "\n";
+        texto += "Início: " + (dtInicio != null ? dtInicio.format(formato) : "Não definida") + "\n";
+        texto += "Fim: " + (dtFim != null ? dtFim.format(formato) : "Não definida") + "\n";
+        texto += "Status: " + status + "\n\n";
+
+        texto += "Pesquisadores envolvidos:\n";
+        if (pesquisadores.isEmpty()) {
+            texto += "  Nenhum.\n";
         } else {
-            for (Experimento e : experimentos) {
-                System.out.println(" - ID: " + e.getID()
-                        + ", Título: " + e.getTitulo() + ", Data: " + e.getDtRealizacao().format(formato));
+            for (Pesquisador p : pesquisadores) {
+                texto += "  - ID: " + p.getId() + ", Nome: " + p.getNome() + "\n";
             }
         }
-        System.out.println("===============================");
+
+        texto += "\nExperimentos relacionados:\n";
+        if (experimentos.isEmpty()) {
+            texto += "  Nenhum experimento associado.\n";
+        } else {
+            for (Experimento e : experimentos) {
+                texto += "  - ID: " + e.getID()
+                        + ", Título: " + e.getTitulo()
+                        + ", Data: " + e.getData().format(formato)
+                        + "\n";
+            }
+        }
+
+        return texto;
     }
 
     @Override

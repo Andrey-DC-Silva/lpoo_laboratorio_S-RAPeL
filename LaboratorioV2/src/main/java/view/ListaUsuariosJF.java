@@ -1,9 +1,19 @@
 package view;
 
-public class ListaPesquisadoresJF extends javax.swing.JFrame {
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Usuarios;
+import model.dao.UsuariosDAO;
 
-    public ListaPesquisadoresJF() {
+public class ListaUsuariosJF extends javax.swing.JFrame {
+
+    public ListaUsuariosJF() {
         initComponents();
+        loadTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -15,11 +25,11 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPesquisadores = new javax.swing.JTable();
+        tblUsuarios = new javax.swing.JTable();
         btnAdicionar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnInformacoes = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,31 +62,31 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
         jLabel26.setBackground(new java.awt.Color(255, 255, 255));
         jLabel26.setFont(new java.awt.Font("SimSun-ExtB", 1, 20)); // NOI18N
         jLabel26.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel26.setText("Pesquisadores Cadastrados");
+        jLabel26.setText("Usuarios Cadastrados");
 
-        tblPesquisadores.setBackground(new java.awt.Color(102, 102, 102));
-        tblPesquisadores.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
-        tblPesquisadores.setForeground(new java.awt.Color(255, 255, 255));
-        tblPesquisadores.setModel(new javax.swing.table.DefaultTableModel(
+        tblUsuarios.setBackground(new java.awt.Color(102, 102, 102));
+        tblUsuarios.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
+        tblUsuarios.setForeground(new java.awt.Color(255, 255, 255));
+        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "ID", "Nome", "Dt_Nascimento", "Área de Atuação"
+                "ID", "Nome"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblPesquisadores);
+        jScrollPane1.setViewportView(tblUsuarios);
 
         btnAdicionar.setBackground(new java.awt.Color(0, 51, 51));
         btnAdicionar.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
@@ -104,19 +114,6 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
             }
         });
 
-        btnInformacoes.setBackground(new java.awt.Color(0, 51, 51));
-        btnInformacoes.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
-        btnInformacoes.setForeground(new java.awt.Color(255, 255, 255));
-        btnInformacoes.setText("Mais Informações");
-        btnInformacoes.setToolTipText("");
-        btnInformacoes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, null, new java.awt.Color(0, 102, 51)));
-        btnInformacoes.setMinimumSize(new java.awt.Dimension(72, 23));
-        btnInformacoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInformacoesActionPerformed(evt);
-            }
-        });
-
         btnRemover.setBackground(new java.awt.Color(0, 51, 51));
         btnRemover.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
         btnRemover.setForeground(new java.awt.Color(255, 255, 255));
@@ -130,32 +127,44 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 227, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jLabel26)
-                .addContainerGap(91, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(124, 124, 124)
+                        .addComponent(jLabel26)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,14 +175,15 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,26 +200,84 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-
-    }//GEN-LAST:event_btnRemoverActionPerformed
-
-    private void btnInformacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacoesActionPerformed
-
-    }//GEN-LAST:event_btnInformacoesActionPerformed
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        CadastroPesquisadorJD dialog = new CadastroPesquisadorJD(this, true);
+        dialog.setVisible(true);
+        loadTabela();
+    }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int row = tblUsuarios.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário para editar.");
+            return;
+        }
 
+        int id = (int) tblUsuarios.getValueAt(row, 0);
+        UsuariosDAO dao = new UsuariosDAO();
+
+        Optional<Usuarios> optionalUsuario = dao.buscarPorId(id);
+
+        if (optionalUsuario.isPresent()) {
+            Usuarios u = optionalUsuario.get();
+            CadastroPesquisadorJD dialog = new CadastroPesquisadorJD(this, true);
+            dialog.setPesquisadorParaEditar(u);
+            dialog.setVisible(true);
+            loadTabela();
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuário não encontrado!");
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        int row = tblUsuarios.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário para remover.");
+            return;
+        }
 
-    }//GEN-LAST:event_btnAdicionarActionPerformed
+        int id = (int) tblUsuarios.getValueAt(row, 0);
+
+        if (JOptionPane.showConfirmDialog(
+                this,
+                "Deseja realmente remover o usuário ID " + id + "?",
+                "Confirmar remoção",
+                JOptionPane.YES_NO_OPTION
+        ) == JOptionPane.YES_OPTION) {
+
+            UsuariosDAO dao = new UsuariosDAO();
+
+            try {
+                dao.remover(id);
+            } catch (Exception ex) {
+                Logger.getLogger(ListaUsuariosJF.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            loadTabela();
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    public void loadTabela() {
+        UsuariosDAO dao = new UsuariosDAO();
+        List<Usuarios> lista = dao.listaUsuarios();
+        DefaultTableModel model = (DefaultTableModel) tblUsuarios.getModel();
+        model.setRowCount(0);
+
+        for (Usuarios u : lista) {
+            String nome = u.getPesquisador() != null
+                    ? u.getPesquisador().getNome()
+                    : "(sem nome)";
+
+            model.addRow(new Object[]{
+                u.getId(),
+                nome
+            });
+        }
+    }
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ListaPesquisadoresJF().setVisible(true);
+                new ListaUsuariosJF().setVisible(true);
             }
         });
     }
@@ -217,13 +285,13 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnInformacoes;
     private javax.swing.JButton btnRemover;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblPesquisadores;
+    private javax.swing.JTable tblUsuarios;
     // End of variables declaration//GEN-END:variables
 }

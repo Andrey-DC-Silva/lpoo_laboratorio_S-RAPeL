@@ -12,7 +12,10 @@ public class Usuarios {
 
     @Column(nullable = false)
     private String senha;
-    
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Pesquisador pesquisador;
+
     public int getId() {
         return id;
     }
@@ -27,6 +30,14 @@ public class Usuarios {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Pesquisador getPesquisador() {
+        return pesquisador;
+    }
+
+    public void setPesquisador(Pesquisador pesquisador) {
+        this.pesquisador = pesquisador;
     }
 
 }

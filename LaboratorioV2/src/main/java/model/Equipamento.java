@@ -21,14 +21,6 @@ public class Equipamento implements Mostrar, Serializable {
     @Column(name = "equip_estado")
     private String estado;
 
-    @ManyToOne
-    @JoinColumn(name = "equip_sala")
-    private Sala sala;
-
-    @ManyToOne
-    @JoinColumn(name = "id_tecnico")
-    private Tecnico tecnico;
-
     public int getId() {
         return id;
     }
@@ -61,32 +53,18 @@ public class Equipamento implements Mostrar, Serializable {
         this.estado = estado;
     }
 
-    public Sala getSala() {
-        return sala;
-    }
-
-    public void setSala(Sala sala) {
-        this.sala = sala;
-    }
-
-    public Tecnico getTecnico() {
-        return tecnico;
-    }
-
-    public void setTecnico(Tecnico tecnico) {
-        this.tecnico = tecnico;
-    }
-
     @Override
-    public void mostrarDados() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("---- Dados do Equipamento ----");
-        System.out.println("Modelo: " + modelo);
-        System.out.println("Descrição: " + descricao);
-        System.out.println("Estado: " + estado);
-        System.out.println("Sala: " + sala);
-        System.out.println("===============================");
+    public String mostrarDados() {
+
+        String texto = "";
+
+        texto += "---- Dados do Equipamento ----";
+        texto += "Modelo: " + modelo;
+        texto += "Descrição: " + descricao;
+        texto += "Estado: " + estado;
+
+        return texto;
+
     }
 
     @Override
@@ -96,7 +74,12 @@ public class Equipamento implements Mostrar, Serializable {
         System.out.println("--- Resumo do Equipamento ---");
         System.out.println("Modelo: " + modelo);
         System.out.println("Estado: " + estado);
-        System.out.println("Sala: " + sala);
         System.out.println("===============================");
     }
+
+    @Override
+    public String toString() {
+        return modelo;
+    }
+
 }

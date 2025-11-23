@@ -22,12 +22,8 @@ public class Experimento implements Mostrar, Serializable {
     @Column(name = "exp_descricao")
     private String descricao;
 
-    @Column(name = "exp_dtRealizacao")
-    private LocalDate dtRealizacao;
-
-    @ManyToOne
-    @JoinColumn(name = "exp_sala")
-    private Sala sala;
+    @Column(name = "exp_data")
+    private LocalDate data;
 
     @ManyToOne
     @JoinColumn(name = "exp_responsavel")
@@ -72,20 +68,12 @@ public class Experimento implements Mostrar, Serializable {
         this.descricao = descricao;
     }
 
-    public LocalDate getDtRealizacao() {
-        return dtRealizacao;
+    public LocalDate getData() {
+        return data;
     }
 
-    public void setDtRealizacao(LocalDate dtRealizacao) {
-        this.dtRealizacao = dtRealizacao;
-    }
-
-    public Sala getSala() {
-        return sala;
-    }
-
-    public void setSala(Sala sala) {
-        this.sala = sala;
+    public void setData(LocalDate data) {
+        this.data = data;
     }
 
     public Pesquisador getResponsavel() {
@@ -102,17 +90,18 @@ public class Experimento implements Mostrar, Serializable {
     }
 
     @Override
-    public void mostrarDados() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("---- Dados do Experimento ----");
-        System.out.println("ID: " + id);
-        System.out.println("Título: " + titulo);
-        System.out.println("Descrição: " + descricao);
-        System.out.println("Data de Realização: " + dtRealizacao.format(formato));
-        System.out.println("Sala: " + sala);
-        System.out.println("Responsável - ID: " + responsavel.getId() + " / " + (responsavel != null ? responsavel.getNome() : "Não definido"));
-        System.out.println("===============================");
+    public String mostrarDados(){
+        
+        String texto = ""; 
+       
+        texto += "---- Dados do Experimento ----";
+        texto += "ID: " + id;
+        texto += "Título: " + titulo;
+        texto += "Descrição: " + descricao;
+        texto += "Data de Realização: " + data.format(formato);
+        texto += "Responsável - ID: " + responsavel.getId() + " / " + (responsavel != null ? responsavel.getNome() : "Não definido");
+
+        return texto;
     }
 
     @Override
@@ -122,7 +111,7 @@ public class Experimento implements Mostrar, Serializable {
         System.out.println("--- Resumo do Experimento ---");
         System.out.println("ID: " + id);
         System.out.println("Titulo: " + titulo);
-        System.out.println("Data: " + dtRealizacao.format(formato));
+        System.out.println("Data: " + data.format(formato));
         System.out.println("Responsável - Id:" + responsavel.getId() + " / " + responsavel);
         System.out.println("===============================");
     }

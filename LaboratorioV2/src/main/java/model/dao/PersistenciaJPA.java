@@ -61,7 +61,7 @@ public class PersistenciaJPA implements InterfaceBD {
             if (!entity.contains(o)) {
                 o = entity.merge(o);
             }
-            entity.remove(o); // Remover o objeto
+            entity.remove(o);
             entity.getTransaction().commit();
         } catch (Exception e) {
             System.err.println("Erro ao remover entidade: " + o.getClass().getSimpleName());
