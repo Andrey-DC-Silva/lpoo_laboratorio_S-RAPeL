@@ -1,8 +1,29 @@
 package view;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Pesquisador;
+import model.Projeto;
+import model.dao.PesquisadorDAO;
+
 public class ListaPesquisadoresJF extends javax.swing.JFrame {
 
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+    private Projeto projeto;
+    private PesquisadorDAO dao;
+
+    public ListaPesquisadoresJF(Projeto projeto) {
+        this.projeto = projeto;
+        this.dao = new PesquisadorDAO();
+        initComponents();
+        loadTabela();
+    }
+
     public ListaPesquisadoresJF() {
+        this.dao = new PesquisadorDAO();
         initComponents();
     }
 
@@ -191,28 +212,95 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        int selectedRow = tblPesquisadores.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um pesquisador para remover.");
+            return;
+        }
 
+        int id = (int) tblPesquisadores.getValueAt(selectedRow, 0);
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente remover o pesquisador?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                dao.remover(id);
+                loadTabela();
+                JOptionPane.showMessageDialog(this, "Pesquisador removido com sucesso.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao remover pesquisador: " + ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnInformacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacoesActionPerformed
-
+        if (tblPesquisadores.getSelectedRow() != -1) {
+            Pesquisador pesquisador = (Pesquisador) dao.buscarPorId((int) tblPesquisadores.getModel().getValueAt(tblPesquisadores.getSelectedRow(), 0)).get();
+            JOptionPane.showMessageDialog(rootPane, pesquisador.mostrarDados());
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione um pesquisador");
+        }
     }//GEN-LAST:event_btnInformacoesActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
+        int selectedRow = tblPesquisadores.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um pesquisador para editar.");
+            return;
+        }
+        int id = (int) tblPesquisadores.getValueAt(selectedRow, 0);
+        Pesquisador pesquisador = dao.buscarPorId(id).orElse(null);
+        if (pesquisador == null) {
+            JOptionPane.showMessageDialog(this, "Pesquisador não encontrado.");
+            return;
+        }
+        CadastroPesquisadorJD telaEdicao = new CadastroPesquisadorJD(this, true);
+        telaEdicao.setPesquisadorParaEditar(pesquisador);
+        telaEdicao.setVisible(true);
+        try {
+            dao.persist(telaEdicao.getPesquisador());
+            loadTabela();
+            JOptionPane.showMessageDialog(this, "Pesquisador editado com sucesso.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar pesquisador: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(this, true);
+        cadastro.setVisible(true);
 
+        Pesquisador pesquisador = cadastro.getPesquisador();
+        if (pesquisador != null) {
+            try {
+                dao.persist(pesquisador);
+                loadTabela();
+                JOptionPane.showMessageDialog(this, "Pesquisador adicionado com sucesso.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar pesquisador: " + ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ListaPesquisadoresJF().setVisible(true);
-            }
-        });
+    private void loadTabela() {
+        List<Pesquisador> pesquisadores;
+        if (projeto == null) {
+            pesquisadores = dao.listaPesquisadores();
+        } else {
+            pesquisadores = dao.listaPorProjeto(projeto.getId());
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tblPesquisadores.getModel();
+        model.setRowCount(0);
+        for (Pesquisador p : pesquisadores) {
+            model.addRow(new Object[]{
+                p.getId(),
+                p.getNome(),
+                p.getDtNasc().format(formato),
+                p.getAreaAtuacao()
+            });
+        }
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;

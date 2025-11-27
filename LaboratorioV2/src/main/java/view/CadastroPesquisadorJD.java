@@ -22,15 +22,50 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
     }
 
     public void setPesquisadorParaEditar(Usuarios usuario) {
-        this.pesquisador = usuario.getPesquisador();
-
-        txtID.setText(String.valueOf(pesquisador.getId()));
+        if (usuario.getPesquisador() != null) {
+            this.pesquisador = usuario.getPesquisador();
+            txtNome.setText(pesquisador.getNome());
+            txtCPF.setText(pesquisador.getCpf());
+            txtDataNasc.setText(pesquisador.getDtNasc().format(formato));
+            txtAfiliacao.setText(pesquisador.getAfiliacao());
+            txtArea.setText(pesquisador.getAreaAtuacao());
+            pswSenha.setText("");
+        } else {
+            this.pesquisador = new Pesquisador();
+        }
+    }
+    
+    public void setPesquisadorParaEditar(Pesquisador pesquisador) {
+        this.pesquisador = pesquisador;
         txtNome.setText(pesquisador.getNome());
         txtCPF.setText(pesquisador.getCpf());
         txtDataNasc.setText(pesquisador.getDtNasc().format(formato));
         txtAfiliacao.setText(pesquisador.getAfiliacao());
         txtArea.setText(pesquisador.getAreaAtuacao());
         pswSenha.setText("");
+    }
+    
+    public Pesquisador getPesquisador() {
+        if (pesquisador == null) {
+            pesquisador = new Pesquisador();
+        }
+        pesquisador.setNome(txtNome.getText().trim());
+        pesquisador.setCpf(txtCPF.getText().trim());
+        pesquisador.setDtNasc(LocalDate.parse(txtDataNasc.getText().trim(), formato));
+        pesquisador.setAfiliacao(txtAfiliacao.getText().trim());
+        pesquisador.setAreaAtuacao(txtArea.getText().trim());
+
+        Usuarios usuario = pesquisador.getUsuario();
+        if (usuario == null) {
+            usuario = new Usuarios();
+        }
+        String senha = new String(pswSenha.getPassword());
+        if (!senha.isBlank()) {
+            usuario.setSenha(hashSenha(senha));
+        }
+        pesquisador.setUsuario(usuario);
+
+        return pesquisador;
     }
 
     @SuppressWarnings("unchecked")
@@ -42,13 +77,11 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
         txtNome = new javax.swing.JTextField();
         txtCPF = new javax.swing.JTextField();
         txtDataNasc = new javax.swing.JTextField();
@@ -100,11 +133,6 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(0, 102, 51));
         jLabel4.setText("Informe");
 
-        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("ID:");
-
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -129,11 +157,6 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         jLabel11.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Afiliacao:");
-
-        txtID.setBackground(new java.awt.Color(51, 51, 51));
-        txtID.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
-        txtID.setForeground(new java.awt.Color(0, 153, 51));
-        txtID.setSelectionColor(new java.awt.Color(0, 102, 102));
 
         txtNome.setBackground(new java.awt.Color(51, 51, 51));
         txtNome.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
@@ -216,7 +239,7 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 142, Short.MAX_VALUE)
+            .addGap(0, 73, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -243,30 +266,25 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
                                 .addComponent(txtAfiliacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel15)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCadastrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtDataNasc))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtCPF))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel13)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(pswSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -301,40 +319,32 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
                     .addComponent(jLabel14))
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtAfiliacao, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
                     .addComponent(jLabel7)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10)
-                        .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
-                            .addComponent(pswSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
+                            .addComponent(pswSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -360,12 +370,10 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
             if (pesquisador == null) {
                 pesquisador = new Pesquisador();
             }
-
-            pesquisador.setId(Integer.parseInt(txtID.getText().trim()));
             pesquisador.setNome(txtNome.getText().trim());
             pesquisador.setCpf(txtCPF.getText().trim());
             pesquisador.setDtNasc(LocalDate.parse(txtDataNasc.getText().trim(), formato));
-            pesquisador.setAfiliacoes(txtAfiliacao.getText().trim());
+            pesquisador.setAfiliacao(txtAfiliacao.getText().trim());
             pesquisador.setAreaAtuacao(txtArea.getText().trim());
 
             Usuarios usuario = pesquisador.getUsuario();
@@ -407,19 +415,6 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         }
     }
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            CadastroPesquisadorJD dialog = new CadastroPesquisadorJD(new javax.swing.JFrame(), true);
-            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    System.exit(0);
-                }
-            });
-            dialog.setVisible(true);
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
@@ -431,7 +426,6 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -443,7 +437,6 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtCPF;
     private javax.swing.JTextField txtDataNasc;
-    private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }

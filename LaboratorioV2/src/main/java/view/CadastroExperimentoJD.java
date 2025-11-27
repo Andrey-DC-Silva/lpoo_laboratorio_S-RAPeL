@@ -6,28 +6,29 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import model.Experimento;
 import model.Pesquisador;
+import model.Projeto;
 import model.dao.ExperimentoDAO;
 import model.dao.PesquisadorDAO;
 
 public class CadastroExperimentoJD extends javax.swing.JDialog {
 
-    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private Experimento experimento;
+    private Projeto projeto;
 
-    public CadastroExperimentoJD(java.awt.Frame parent, boolean modal) {
+    public CadastroExperimentoJD(java.awt.Frame parent, boolean modal, Projeto projeto) {
         super(parent, modal);
+        this.projeto = projeto;
         initComponents();
         loadPesquisadores();
     }
 
-    public void setExperimentoParaEditar(Experimento e) {
-        this.experimento = e;
-        txtID1.setText(String.valueOf(e.getID()));
-        txtID1.setEditable(false);
-        txtTitulo1.setText(e.getTitulo());
-        txtDescricao1.setText(e.getDescricao());
-        txtData1.setText(e.getData().format(formato));
-        cmbResponsavel1.setSelectedItem(e.getResponsavel());
+    public void setExperimentoParaEditar(Experimento experimento) {
+        this.experimento = experimento;
+        txtTitulo1.setText(experimento.getTitulo());
+        txtDescricao1.setText(experimento.getDescricao());
+        txtData1.setText(experimento.getDtRealizacao().format(formato));
+        cmbResponsavel1.setSelectedItem(experimento.getResponsavel());
         btnCadastrar1.setText("Atualizar");
     }
 
@@ -41,16 +42,13 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         jPanel6 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
-        jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
-        txtID1 = new javax.swing.JTextField();
         txtTitulo1 = new javax.swing.JTextField();
         txtData1 = new javax.swing.JTextField();
         btnCadastrar1 = new javax.swing.JButton();
         btnCancelar1 = new javax.swing.JButton();
-        jLabel42 = new javax.swing.JLabel();
         cmbResponsavel1 = new javax.swing.JComboBox<>();
         jLabel43 = new javax.swing.JLabel();
         txtDescricao1 = new javax.swing.JTextField();
@@ -96,11 +94,6 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         jLabel37.setForeground(new java.awt.Color(0, 102, 51));
         jLabel37.setText("Informe");
 
-        jLabel38.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel38.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
-        jLabel38.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel38.setText("ID:");
-
         jLabel39.setBackground(new java.awt.Color(255, 255, 255));
         jLabel39.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
         jLabel39.setForeground(new java.awt.Color(255, 255, 255));
@@ -115,11 +108,6 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         jLabel41.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
         jLabel41.setForeground(new java.awt.Color(255, 255, 255));
         jLabel41.setText("Resp.:");
-
-        txtID1.setBackground(new java.awt.Color(51, 51, 51));
-        txtID1.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
-        txtID1.setForeground(new java.awt.Color(0, 153, 51));
-        txtID1.setSelectionColor(new java.awt.Color(0, 102, 102));
 
         txtTitulo1.setBackground(new java.awt.Color(51, 51, 51));
         txtTitulo1.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
@@ -157,11 +145,6 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
             }
         });
 
-        jLabel42.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel42.setFont(new java.awt.Font("SimSun-ExtB", 1, 20)); // NOI18N
-        jLabel42.setForeground(new java.awt.Color(0, 102, 51));
-        jLabel42.setText("Opcional");
-
         cmbResponsavel1.setBackground(new java.awt.Color(51, 51, 51));
         cmbResponsavel1.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
         cmbResponsavel1.setForeground(new java.awt.Color(0, 102, 51));
@@ -181,12 +164,6 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(jLabel37)
-                .addGap(202, 202, 202)
-                .addComponent(jLabel42)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -201,29 +178,28 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addGap(36, 36, 36)
+                                        .addComponent(jLabel30))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addComponent(jLabel39)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtTitulo1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel38)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel30)
-                                            .addComponent(txtID1))))
-                                .addGap(44, 44, 44)
-                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel41)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cmbResponsavel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel40)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtData1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(btnCadastrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtTitulo1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(66, 66, 66)
+                                .addComponent(jLabel41)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbResponsavel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnCadastrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jLabel40)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtData1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addComponent(jLabel37)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,19 +207,15 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel37)
-                    .addComponent(jLabel42))
+                .addComponent(jLabel37)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel38)
-                    .addComponent(txtID1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel41)
-                    .addComponent(cmbResponsavel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbResponsavel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTitulo1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel39))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTitulo1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel39)
                     .addComponent(txtData1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel40))
                 .addGap(18, 18, 18)
@@ -311,10 +283,6 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         }
 
         try {
-
-            int id = Integer.parseInt(txtID1.getText().trim());
-            experimento.setId(id);
-
             String titulo = txtTitulo1.getText().trim();
             if (titulo.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Título não pode estar vazio!");
@@ -324,27 +292,24 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
 
             String dataStr = txtData1.getText().trim();
             LocalDate data = LocalDate.parse(dataStr, formato);
-            experimento.setData(data);
+            experimento.setDtRealizacao(data);
 
             experimento.setDescricao(txtDescricao1.getText().trim());
 
             Pesquisador responsavel = (Pesquisador) cmbResponsavel1.getSelectedItem();
             if (responsavel == null) {
-                JOptionPane.showMessageDialog(rootPane, "Selecione um Pesquisador!");
+                JOptionPane.showMessageDialog(rootPane, "Selecione um Responsavel!");
                 return;
             }
             experimento.setResponsavel(responsavel);
+
+            experimento.setProjeto(projeto);
 
             ExperimentoDAO dao = new ExperimentoDAO();
             dao.persist(experimento);
 
             JOptionPane.showMessageDialog(this, "Experimento cadastrado com sucesso!");
             this.dispose();
-
-        } catch (NumberFormatException ex1) {
-            JOptionPane.showMessageDialog(rootPane,
-                    "ID inválido! Deve ser um número inteiro.\n" + ex1,
-                    "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (Exception ex2) {
             JOptionPane.showMessageDialog(rootPane,
@@ -361,20 +326,7 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
             cmbResponsavel1.addItem(p);
         }
     }
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            CadastroExperimentoJD dialog = new CadastroExperimentoJD(new javax.swing.JFrame(), true);
-            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    System.exit(0);
-                }
-            });
-            dialog.setVisible(true);
-        });
-    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar1;
     private javax.swing.JButton btnCancelar1;
@@ -383,18 +335,15 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JTextField txtData1;
     private javax.swing.JTextField txtDescricao1;
-    private javax.swing.JTextField txtID1;
     private javax.swing.JTextField txtTitulo1;
     // End of variables declaration//GEN-END:variables
 }

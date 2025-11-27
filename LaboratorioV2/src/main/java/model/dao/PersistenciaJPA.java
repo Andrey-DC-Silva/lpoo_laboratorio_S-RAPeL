@@ -12,7 +12,7 @@ public class PersistenciaJPA implements InterfaceBD {
     EntityManagerFactory factory;
 
     public PersistenciaJPA() {
-        factory = Persistence.createEntityManagerFactory("pu_concessionaria");
+        factory = Persistence.createEntityManagerFactory("pu_laboratorio");
         entity = factory.createEntityManager();
     }
 

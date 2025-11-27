@@ -11,7 +11,7 @@ public class UsuariosDAO extends PersistenciaJPA {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuarios> query
-                    = em.createQuery("SELECT us FROM Usuarios u", Usuarios.class);
+                    = em.createQuery("SELECT u FROM Usuarios u", Usuarios.class);
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,6 +41,23 @@ public class UsuariosDAO extends PersistenciaJPA {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    public Usuarios buscarPorCpfESenha(String cpf, String hashSenha) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Usuarios> query = em.createQuery(
+                    "SELECT u FROM Usuarios u JOIN u.pesquisador p WHERE p.cpf = :cpf AND u.senha = :senha",
+                    Usuarios.class
+            );
+            query.setParameter("cpf", cpf);
+            query.setParameter("senha", hashSenha);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
         }
     }
 }

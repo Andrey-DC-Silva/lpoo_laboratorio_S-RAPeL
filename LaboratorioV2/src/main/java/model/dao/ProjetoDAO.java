@@ -31,5 +31,18 @@ public class ProjetoDAO extends PersistenciaJPA {
             em.close();
         }
     }
+    
+        public Optional<Projeto> buscarPorExperimentos(int id) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Projeto> query = em.createQuery(
+                "SELECT p FROM Projeto p LEFT JOIN FETCH p.experimentos WHERE p.id = :id", Projeto.class
+            );
+            query.setParameter("id", id);
+            return query.getResultList().stream().findFirst();
+        } finally {
+            em.close();
+        }
+    }
 
 }

@@ -32,4 +32,15 @@ public class PesquisadorDAO extends PersistenciaJPA {
         }
     }
 
+    public List<Pesquisador> listaPorProjeto(int projetoId) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Pesquisador> query = em.createQuery(
+                    "SELECT p FROM Pesquisador p WHERE p.projeto.id = :projetoId", Pesquisador.class);
+            query.setParameter("projetoId", projetoId);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -35,7 +35,7 @@ public class Pesquisador extends Pessoa {
         return afiliacao;
     }
 
-    public void setAfiliacoes(String afiliacao) {
+    public void setAfiliacao(String afiliacao) {
         this.afiliacao = afiliacao;
     }
 
@@ -63,26 +63,15 @@ public class Pesquisador extends Pessoa {
 
         String texto = "";
 
-        texto += "---- Dados do Pesquisador ----";
-        texto += "ID: " + getId();
-        texto += "Nome: " + getNome();
-        texto += "CPF: " + getCpf();
-        texto += "Data de Nascimento: " + getDtNasc().format(formato);
-        texto += "Área de Atuação: " + getAreaAtuacao();
-        texto += "Afiliação: " + getAfiliacao();
+        texto += "\n---- Dados do Pesquisador ----";
+        texto += "\nID: " + getId();
+        texto += "\nNome: " + getNome();
+        texto += "\nCPF: " + getCpf();
+        texto += "\nData de Nascimento: " + getDtNasc().format(formato);
+        texto += "\nÁrea de Atuação: " + getAreaAtuacao();
+        texto += "\nAfiliação: " + getAfiliacao();
 
         return texto;
 
-    }
-
-    @Override
-    public void mostrarResumo() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("--- Resumo do Pesquisador ---");
-        System.out.println("ID: " + getId());
-        System.out.println("Nome: " + getNome());
-        System.out.println("Área de Atuação: " + getAreaAtuacao());
-        System.out.println("===============================");
     }
 }

@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import model.Experimento;
-import model.Projeto;
 
 public class ExperimentoDAO extends PersistenciaJPA {
 
@@ -33,4 +32,15 @@ public class ExperimentoDAO extends PersistenciaJPA {
         }
     }
 
+    public List<Experimento> listaPorProjeto(int projetoId) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Experimento> query = em.createQuery(
+                    "SELECT e FROM Experimento e WHERE e.projeto.id = :projetoId", Experimento.class);
+            query.setParameter("projetoId", projetoId);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

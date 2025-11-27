@@ -8,14 +8,23 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Experimento;
+import model.Projeto;
 import model.dao.ExperimentoDAO;
 
 public class ListaExperimentosJF extends javax.swing.JFrame {
 
-    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private Projeto projeto;
+    private List<Experimento> experimentos;
 
-    public ListaExperimentosJF() {
+    public ListaExperimentosJF(Projeto projeto) {
+        this.projeto = projeto;
         initComponents();
+        loadTabela();
+    }
+
+    public void setExperimentos(List<Experimento> experimentos) {
+        this.experimentos = experimentos;
         loadTabela();
     }
 
@@ -72,17 +81,17 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
         tblExperimentos.setForeground(new java.awt.Color(255, 255, 255));
         tblExperimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Titulo", "Data", "Sala", "Responsavel"
+                "ID", "Titulo", "Data", "Responsavel"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -156,15 +165,18 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(298, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(108, 108, 108))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,7 +216,7 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        CadastroExperimentoJD dialog = new CadastroExperimentoJD(this, true);
+        CadastroExperimentoJD dialog = new CadastroExperimentoJD(this, true, projeto);
         dialog.setVisible(true);
         loadTabela();
     }//GEN-LAST:event_btnAdicionarActionPerformed
@@ -223,7 +235,7 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
 
         if (optionalExperimento.isPresent()) {
             Experimento experimento = optionalExperimento.get();
-            CadastroExperimentoJD dialog = new CadastroExperimentoJD(this, true);
+            CadastroExperimentoJD dialog = new CadastroExperimentoJD(this, true, projeto);
             dialog.setExperimentoParaEditar(experimento);
             dialog.setVisible(true);
             loadTabela();
@@ -274,28 +286,22 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void loadTabela() {
-        ExperimentoDAO dao = new ExperimentoDAO();
-        List<Experimento> experiments = dao.listaExperimentos();
         DefaultTableModel model = (DefaultTableModel) tblExperimentos.getModel();
         model.setRowCount(0);
-        for (Experimento e : experiments) {
+
+        ExperimentoDAO dao = new ExperimentoDAO();
+        List<Experimento> lista = dao.listaPorProjeto(projeto.getId());
+
+        for (Experimento e : lista) {
             model.addRow(new Object[]{
                 e.getID(),
                 e.getTitulo(),
-                e.getData().format(formato),
+                e.getDtRealizacao() != null ? e.getDtRealizacao().format(formato) : "",
                 e.getResponsavel() != null ? e.getResponsavel().getNome() : "Não definido"
             });
         }
     }
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ListaExperimentosJF().setVisible(true);
-            }
-        });
-    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnEditar;

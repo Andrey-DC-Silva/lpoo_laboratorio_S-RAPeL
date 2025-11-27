@@ -30,10 +30,8 @@ public class MenuJF extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnListaPesquisadores = new javax.swing.JButton();
-        btnListaEquipamentos = new javax.swing.JButton();
         btnListaProjetos = new javax.swing.JButton();
         btnListaUsuarios = new javax.swing.JButton();
-        btnListaExperimentos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,19 +119,6 @@ public class MenuJF extends javax.swing.JFrame {
             }
         });
 
-        btnListaEquipamentos.setBackground(new java.awt.Color(0, 51, 51));
-        btnListaEquipamentos.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
-        btnListaEquipamentos.setForeground(new java.awt.Color(255, 255, 255));
-        btnListaEquipamentos.setText("Equipamentos");
-        btnListaEquipamentos.setToolTipText("");
-        btnListaEquipamentos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, null, new java.awt.Color(0, 102, 51)));
-        btnListaEquipamentos.setMinimumSize(new java.awt.Dimension(72, 23));
-        btnListaEquipamentos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListaEquipamentosActionPerformed(evt);
-            }
-        });
-
         btnListaProjetos.setBackground(new java.awt.Color(0, 51, 51));
         btnListaProjetos.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
         btnListaProjetos.setForeground(new java.awt.Color(255, 255, 255));
@@ -160,54 +145,29 @@ public class MenuJF extends javax.swing.JFrame {
             }
         });
 
-        btnListaExperimentos.setBackground(new java.awt.Color(0, 51, 51));
-        btnListaExperimentos.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
-        btnListaExperimentos.setForeground(new java.awt.Color(255, 255, 255));
-        btnListaExperimentos.setText("Experimentos");
-        btnListaExperimentos.setToolTipText("");
-        btnListaExperimentos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, null, new java.awt.Color(0, 102, 51)));
-        btnListaExperimentos.setMinimumSize(new java.awt.Dimension(72, 23));
-        btnListaExperimentos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListaExperimentosActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(btnListaPesquisadores, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnListaEquipamentos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(btnListaUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
-                .addComponent(btnListaExperimentos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(63, 63, 63)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnListaUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnListaPesquisadores, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                 .addComponent(btnListaProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(223, 223, 223))
+                .addGap(62, 62, 62))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnListaPesquisadores, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnListaEquipamentos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnListaProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnListaUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnListaExperimentos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
+                    .addComponent(btnListaProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(btnListaUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -287,11 +247,6 @@ public class MenuJF extends javax.swing.JFrame {
         lista.setVisible(true);
     }//GEN-LAST:event_btnListaPesquisadoresActionPerformed
 
-    private void btnListaEquipamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaEquipamentosActionPerformed
-        ListaEquipamentosJF lista = new ListaEquipamentosJF();
-        lista.setVisible(true);
-    }//GEN-LAST:event_btnListaEquipamentosActionPerformed
-
     private void btnListaProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaProjetosActionPerformed
         ListaProjetosJF lista = new ListaProjetosJF();
         lista.setVisible(true);
@@ -302,11 +257,6 @@ public class MenuJF extends javax.swing.JFrame {
         lista.setVisible(true);
     }//GEN-LAST:event_btnListaUsuariosActionPerformed
 
-    private void btnListaExperimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaExperimentosActionPerformed
-        ListaExperimentosJF lista = new ListaExperimentosJF();
-        lista.setVisible(true);
-    }//GEN-LAST:event_btnListaExperimentosActionPerformed
-
     private String getUsuarioNome() {
         if (usuarioLogado != null && usuarioLogado.getPesquisador() != null) {
             return usuarioLogado.getPesquisador().getNome();
@@ -314,17 +264,7 @@ public class MenuJF extends javax.swing.JFrame {
         return "Usuário";
     }
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MenuJF().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnListaEquipamentos;
-    private javax.swing.JButton btnListaExperimentos;
     private javax.swing.JButton btnListaPesquisadores;
     private javax.swing.JButton btnListaProjetos;
     private javax.swing.JButton btnListaUsuarios;

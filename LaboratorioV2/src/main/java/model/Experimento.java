@@ -9,7 +9,8 @@ import javax.persistence.*;
 @Table(name = "experimentos")
 public class Experimento implements Mostrar, Serializable {
 
-    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    @Transient
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Id
@@ -23,7 +24,7 @@ public class Experimento implements Mostrar, Serializable {
     private String descricao;
 
     @Column(name = "exp_data")
-    private LocalDate data;
+    private LocalDate dtRealizacao;
 
     @ManyToOne
     @JoinColumn(name = "exp_responsavel")
@@ -68,12 +69,12 @@ public class Experimento implements Mostrar, Serializable {
         this.descricao = descricao;
     }
 
-    public LocalDate getData() {
-        return data;
+    public LocalDate getDtRealizacao() {
+        return dtRealizacao;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
+    public void setDtRealizacao(LocalDate data) {
+        this.dtRealizacao = data;
     }
 
     public Pesquisador getResponsavel() {
@@ -90,30 +91,18 @@ public class Experimento implements Mostrar, Serializable {
     }
 
     @Override
-    public String mostrarDados(){
-        
-        String texto = ""; 
-       
-        texto += "---- Dados do Experimento ----";
-        texto += "ID: " + id;
-        texto += "Título: " + titulo;
-        texto += "Descrição: " + descricao;
-        texto += "Data de Realização: " + data.format(formato);
-        texto += "Responsável - ID: " + responsavel.getId() + " / " + (responsavel != null ? responsavel.getNome() : "Não definido");
+    public String mostrarDados() {
+
+        String texto = "";
+
+        texto += "\n---- Dados do Experimento ----";
+        texto += "\nID: " + id;
+        texto += "\nTítulo: " + titulo;
+        texto += "\nDescrição: " + descricao;
+        texto += "\nData de Realização: " + dtRealizacao.format(formato);
+        texto += "\nResponsável - ID: " + responsavel.getId() + " / " + (responsavel != null ? responsavel.getNome() : "Não definido");
 
         return texto;
-    }
-
-    @Override
-    public void mostrarResumo() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("--- Resumo do Experimento ---");
-        System.out.println("ID: " + id);
-        System.out.println("Titulo: " + titulo);
-        System.out.println("Data: " + data.format(formato));
-        System.out.println("Responsável - Id:" + responsavel.getId() + " / " + responsavel);
-        System.out.println("===============================");
     }
 
 }

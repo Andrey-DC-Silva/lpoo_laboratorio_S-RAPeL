@@ -26,7 +26,7 @@ public class TelaLoginJD extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         pswSenha = new javax.swing.JPasswordField();
-        txtID = new javax.swing.JTextField();
+        txtCPF = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -109,14 +109,14 @@ public class TelaLoginJD extends javax.swing.JDialog {
         pswSenha.setForeground(new java.awt.Color(0, 153, 102));
         pswSenha.setSelectionColor(new java.awt.Color(0, 102, 102));
 
-        txtID.setBackground(new java.awt.Color(51, 51, 51));
-        txtID.setForeground(new java.awt.Color(0, 153, 102));
-        txtID.setSelectionColor(new java.awt.Color(0, 102, 102));
+        txtCPF.setBackground(new java.awt.Color(51, 51, 51));
+        txtCPF.setForeground(new java.awt.Color(0, 153, 102));
+        txtCPF.setSelectionColor(new java.awt.Color(0, 102, 102));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
         jLabel6.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("ID:");
+        jLabel6.setText("CPF:");
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
@@ -134,7 +134,7 @@ public class TelaLoginJD extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtID))
+                        .addComponent(txtCPF))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
@@ -158,14 +158,14 @@ public class TelaLoginJD extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pswSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,24 +193,25 @@ public class TelaLoginJD extends javax.swing.JDialog {
 
     private void btnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessarActionPerformed
         try {
-            int id = Integer.parseInt(txtID.getText().trim());
+            String cpf = txtCPF.getText();
+            cpf = cpf.replace(".", "").replace("-", "").trim();
             String senha = new String(pswSenha.getPassword());
             String hash = hashSenha(senha);
 
             UsuariosDAO dao = new UsuariosDAO();
-            Usuarios user = dao.buscaPorIdSenha(id, hash);
+            Usuarios user = dao.buscarPorCpfESenha(cpf, hash);
 
             if (user != null) {
                 JOptionPane.showMessageDialog(this, "Login efetuado com sucesso!");
                 dispose();
 
-                MenuJF menu = new MenuJF();
+                MenuJF menu = new MenuJF(user);
                 menu.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "ID ou senha incorretos!", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "CPF ou senha incorretos!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID deve ser um número!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "CPF deve ser válido!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAcessarActionPerformed
 
@@ -232,13 +233,6 @@ public class TelaLoginJD extends javax.swing.JDialog {
         }
     }
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            TelaLoginJD login = new TelaLoginJD(null, true);
-            login.setVisible(true);
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAcessar;
     private javax.swing.JButton btnCancelar;
@@ -252,6 +246,6 @@ public class TelaLoginJD extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField pswSenha;
-    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtCPF;
     // End of variables declaration//GEN-END:variables
 }

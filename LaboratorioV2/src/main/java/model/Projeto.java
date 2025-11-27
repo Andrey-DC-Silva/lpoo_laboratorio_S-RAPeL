@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "projetos")
 public class Projeto implements Mostrar, Serializable {
 
+    @Transient
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -33,10 +34,10 @@ public class Projeto implements Mostrar, Serializable {
     @Column(name = "proj_status")
     private String status;
 
-    @OneToMany(mappedBy = "projeto")
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL)
     private List<Pesquisador> pesquisadores = new ArrayList<>();
 
-    @OneToMany(mappedBy = "projeto")
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL)
     private List<Experimento> experimentos = new ArrayList<>();
 
     public Projeto() {
@@ -149,26 +150,12 @@ public class Projeto implements Mostrar, Serializable {
             for (Experimento e : experimentos) {
                 texto += "  - ID: " + e.getID()
                         + ", Título: " + e.getTitulo()
-                        + ", Data: " + e.getData().format(formato)
+                        + ", Data: " + e.getDtRealizacao().format(formato)
                         + "\n";
             }
         }
 
         return texto;
-    }
-
-    @Override
-    public void mostrarResumo() {
-        System.out.println("");
-        System.out.println("===============================");
-        System.out.println("---- Resumo do Projeto ----");
-        System.out.println("Título: " + titulo);
-        System.out.println("Status: " + status);
-        System.out.print(" - Início: " + dtInicio.format(formato));
-        if (dtFim != null) {
-            System.out.println(" - Fim: " + dtFim.format(formato));
-        }
-        System.out.println("===============================");
     }
 
 }

@@ -1,8 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import jakarta.persistence.MappedSuperclass;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.persistence.*;
@@ -10,6 +8,7 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class Pessoa implements Mostrar, Serializable {
 
+    @Transient
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,15 +19,11 @@ public abstract class Pessoa implements Mostrar, Serializable {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "cpf")
+    @Column(name = "cpf", unique = true, length = 11)
     private String cpf;
 
     @Column(name = "dtNasc")
     private LocalDate dtNasc;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
-    private Usuarios usuario;
 
     public Pessoa() {
     }
@@ -68,14 +63,6 @@ public abstract class Pessoa implements Mostrar, Serializable {
 
     public void setDtNasc(LocalDate dtNasc) {
         this.dtNasc = dtNasc;
-    }
-
-    public Usuarios getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
     }
     
     

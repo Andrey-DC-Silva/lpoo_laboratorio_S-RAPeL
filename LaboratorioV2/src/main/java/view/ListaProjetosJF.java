@@ -1,6 +1,5 @@
 package view;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +12,7 @@ public class ListaProjetosJF extends javax.swing.JFrame {
 
     public ListaProjetosJF() {
         initComponents();
+        dao = new ProjetoDAO();
         loadTabela();
     }
 
@@ -30,6 +30,8 @@ public class ListaProjetosJF extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnInformacoes = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
+        btnGerenciarPesquisadores = new javax.swing.JButton();
+        btnGerenciarExperimentos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,6 +142,32 @@ public class ListaProjetosJF extends javax.swing.JFrame {
             }
         });
 
+        btnGerenciarPesquisadores.setBackground(new java.awt.Color(0, 51, 51));
+        btnGerenciarPesquisadores.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
+        btnGerenciarPesquisadores.setForeground(new java.awt.Color(255, 255, 255));
+        btnGerenciarPesquisadores.setText("Gerenciar Pesquisadores");
+        btnGerenciarPesquisadores.setToolTipText("");
+        btnGerenciarPesquisadores.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, null, new java.awt.Color(0, 102, 51)));
+        btnGerenciarPesquisadores.setMinimumSize(new java.awt.Dimension(72, 23));
+        btnGerenciarPesquisadores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerenciarPesquisadoresActionPerformed(evt);
+            }
+        });
+
+        btnGerenciarExperimentos.setBackground(new java.awt.Color(0, 51, 51));
+        btnGerenciarExperimentos.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
+        btnGerenciarExperimentos.setForeground(new java.awt.Color(255, 255, 255));
+        btnGerenciarExperimentos.setText("Gerenciar Experimentos");
+        btnGerenciarExperimentos.setToolTipText("");
+        btnGerenciarExperimentos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, null, new java.awt.Color(0, 102, 51)));
+        btnGerenciarExperimentos.setMinimumSize(new java.awt.Dimension(72, 23));
+        btnGerenciarExperimentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerenciarExperimentosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -154,13 +182,15 @@ public class ListaProjetosJF extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addGap(41, 41, 41)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(10, 10, 10))))
+                                .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRemover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGap(90, 90, 90)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnGerenciarPesquisadores, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                                .addComponent(btnGerenciarExperimentos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnInformacoes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGap(11, 11, 11))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addGap(31, 31, 31)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -179,9 +209,13 @@ public class ListaProjetosJF extends javax.swing.JFrame {
                     .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGerenciarPesquisadores, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGerenciarExperimentos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -273,8 +307,41 @@ public class ListaProjetosJF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
+    private void btnGerenciarPesquisadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPesquisadoresActionPerformed
+        int selectedRow = tblProjetos.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um projeto para gerenciar pesquisadores.");
+            return;
+        }
+        int projetoId = (int) tblProjetos.getValueAt(selectedRow, 0);
+        Projeto proj = dao.buscarPorId(projetoId).orElse(null);
+        if (proj == null) {
+            JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
+            return;
+        }
+        ListaPesquisadoresJF listaPesquisadores = new ListaPesquisadoresJF(proj);
+        listaPesquisadores.setVisible(true);
+    }//GEN-LAST:event_btnGerenciarPesquisadoresActionPerformed
+
+    private void btnGerenciarExperimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarExperimentosActionPerformed
+        int selectedRow = tblProjetos.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um projeto para gerenciar experimentos.");
+            return;
+        }
+
+        int projetoId = (int) tblProjetos.getValueAt(selectedRow, 0);
+        Projeto proj = dao.buscarPorId(projetoId).orElse(null);
+        if (proj == null) {
+            JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
+            return;
+        }
+
+        ListaExperimentosJF listaExp = new ListaExperimentosJF(proj);
+        listaExp.setVisible(true);
+    }//GEN-LAST:event_btnGerenciarExperimentosActionPerformed
+
     private void loadTabela() {
-        ProjetoDAO dao = new ProjetoDAO();
         List<Projeto> projetos = dao.listaProjetos();
         DefaultTableModel model = (DefaultTableModel) tblProjetos.getModel();
         model.setRowCount(0);
@@ -287,17 +354,11 @@ public class ListaProjetosJF extends javax.swing.JFrame {
         }
     }
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ListaProjetosJF().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnGerenciarExperimentos;
+    private javax.swing.JButton btnGerenciarPesquisadores;
     private javax.swing.JButton btnInformacoes;
     private javax.swing.JButton btnRemover;
     private javax.swing.JLabel jLabel26;

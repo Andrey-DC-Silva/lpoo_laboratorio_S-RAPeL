@@ -263,23 +263,9 @@ public class ListaUsuariosJF extends javax.swing.JFrame {
         model.setRowCount(0);
 
         for (Usuarios u : lista) {
-            String nome = u.getPesquisador() != null
-                    ? u.getPesquisador().getNome()
-                    : "(sem nome)";
-
-            model.addRow(new Object[]{
-                u.getId(),
-                nome
-            });
+            String nome = u.getPesquisador() != null ? u.getPesquisador().getNome() : "(sem nome)";
+            model.addRow(new Object[]{ u.getId(), nome });
         }
-    }
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ListaUsuariosJF().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

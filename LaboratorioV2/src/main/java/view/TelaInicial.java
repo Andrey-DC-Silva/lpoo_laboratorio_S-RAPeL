@@ -153,17 +153,15 @@ public class TelaInicial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAcessoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessoActionPerformed
-        this.dispose();
-
         TelaLoginJD login = new TelaLoginJD(null, true);
         login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAcessoActionPerformed
 
     private void btnCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastroActionPerformed
-        this.dispose();
-
         CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(null, true);
         cadastro.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCadastroActionPerformed
 
     public static void main(String args[]) {
