@@ -1,7 +1,7 @@
 # **Sistema de Gerencia de Atividade em um Laboratório - Sis-RAPeL**
 
 
-Repositório no git: 
+Repositório no git: https://github.com/Andrey-DC-Silva/lpoo_laboratorio_S-RAPeL.git
 
 
 ## Introdução
