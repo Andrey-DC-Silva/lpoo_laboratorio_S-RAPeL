@@ -85,3 +85,11 @@ Repositório no git:
 
 ## Diagrama de Relações
 ![Diagrama de Classes do Sis-RAPeL](diagrama.png)
+
+Relações apresentadas no diagrama
+- Mostrar implementa na maior parte da classes
+- Pesquisador herda de Pessoa
+- Pesquisador -> Usuário = 1 para 1
+- Projeto -> Pesquisador = 1 para muitos
+- Projeto -> Experimento = 1 para muitos
+- Experimento -> Pesquisador = muitos para 1
