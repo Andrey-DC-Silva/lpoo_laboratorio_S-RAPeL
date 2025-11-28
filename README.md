@@ -5,9 +5,9 @@ Repositório no git: https://github.com/Andrey-DC-Silva/lpoo_laboratorio_S-RAPeL
 
 
 ## Introdução
-  O sistema foi desenvolvido como atividade avaliativa final da disciplina de Linguagem de Programação Orientada à Objetos e tem o objetivo 
+  - O sistema foi desenvolvido como atividade avaliativa final da disciplina de Linguagem de Programação Orientada à Objetos e tem o objetivo 
  de apresentar uma gerencia com menus interativos de atividades de pesquisa(experimentos) realizadas em um laboratório
-  Busca facilitar a administração dos eventos que acontecem no ambiente, mais projetado para um formato onde vários projetos, pesquisadores
+  - Busca facilitar a administração dos eventos que acontecem no ambiente, mais projetado para um formato onde vários projetos, pesquisadores
  e experimentos estão presentes, melhorando a gerência destes eventos 
 
 
@@ -38,35 +38,35 @@ Repositório no git: https://github.com/Andrey-DC-Silva/lpoo_laboratorio_S-RAPeL
 
 ## Estrutura em MVC do Projeto
 - src/main/java/model
-   Experimento.java
-   Mostrar.java
-   Pesquisador.java
-   Pessoa.java
-   Projeto.java
-   Usuarios.java
+   - Experimento.java
+   - Mostrar.java
+   - Pesquisador.java
+   - Pessoa.java
+   - Projeto.java
+   - Usuarios.java
   
 - src/main/java/model.dao
-   ExperimentoDAO.java
-   InterfaceBD.java
-   PersistenciaJPA.java 
-   PesquisadorDAO.java 
-   ProjetosDAO.java
-   Usuarios.java
+   - ExperimentoDAO.java
+   - InterfaceBD.java
+   - PersistenciaJPA.java 
+   - PesquisadorDAO.java 
+   - ProjetosDAO.java
+   - Usuarios.java
   
 - src/main/java/view
-   CadastroExperimentoJD.java
-   CadastroPesquisadorJD.java
-   CadastroProjetoJD.java
-   ListaExperimentosJF.java
-   ListaPesquisadoresJF.java
-   ListaProjetosJF.java
-   ListaUsuariosJF.java
-   MenuJF.java
-   TelaInicialJF.java
-   TelaLoginJD.java
+   - CadastroExperimentoJD.java
+   - CadastroPesquisadorJD.java
+   - CadastroProjetoJD.java
+    -ListaExperimentosJF.java
+    -ListaPesquisadoresJF.java
+    -ListaProjetosJF.java
+    -ListaUsuariosJF.java
+    -MenuJF.java
+   - TelaInicialJF.java
+   - TelaLoginJD.java
   
 - src/main/java/test
-   TesteConexao.java
+   - TesteConexao.java
    
 
 ## Configuração do pom.xml
