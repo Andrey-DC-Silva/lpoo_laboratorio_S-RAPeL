@@ -1,7 +1,5 @@
 package model.dao;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -32,23 +30,7 @@ public class PersistenciaJPA implements InterfaceBD {
         EntityManager em = getEntityManager();
         return em.find(c, id);
     }
-
-//    @Override
-//    public void persist(Object o) throws Exception {
-//        entity = getEntityManager();
-//        try {
-//            entity.getTransaction().begin();
-//            entity.merge(o);
-//            entity.getTransaction().commit();
-//        } catch (Exception e) {
-//            if (entity.getTransaction().isActive()) {
-//                entity.getTransaction().rollback();
-//            }
-//            Logger.getLogger(PersistenciaJPA.class.getName())
-//                    .log(Level.SEVERE, "Erro ao salvar ou atualizar a entidade: " + o.getClass().getSimpleName(), e);
-//            throw e;
-//        }
-//    }
+    
     @Override
     public void persist(Object o) throws Exception {
         entity = getEntityManager();

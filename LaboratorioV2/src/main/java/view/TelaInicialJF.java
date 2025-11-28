@@ -24,7 +24,7 @@ public class TelaInicialJF extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
-        jLabel1.setFont(new java.awt.Font("Magneto", 0, 48)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Magneto", 0, 60)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setText("S-RAPeL");
         jLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153), new java.awt.Color(102, 102, 102), new java.awt.Color(0, 153, 102)));
@@ -33,14 +33,14 @@ public class TelaInicialJF extends javax.swing.JFrame {
         jLabel2.setText("Andrey DC Silva");
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel3.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("SimSun-ExtB", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText(" Sistema de Registros de Atividades de Pesquisa em um Laboratorio");
 
         jTextArea1.setEditable(false);
         jTextArea1.setBackground(new java.awt.Color(153, 153, 153));
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("SimSun", 1, 18)); // NOI18N
         jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
         jTextArea1.setRows(5);
         jTextArea1.setText("     \n    Sistema para registro de atividades de pesquisa em um \n      laboratório que documenta cada um dos experimentos\n    realizados. Ele permite que pesquisadores registrem suas\n   atividades. Isso melhora a reprodutibilidade das pesquisas. \n     Além disso, facilita o compartilhamento de informações \n    entre equipes. Assim, o laboratório mantém um histórico\n     confiável e seguro de suas atividades científicas e \n        pesquisadores ativos no ambiente laboratorial\n");
@@ -54,7 +54,7 @@ public class TelaInicialJF extends javax.swing.JFrame {
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         btnCadastro.setBackground(new java.awt.Color(0, 51, 51));
-        btnCadastro.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
+        btnCadastro.setFont(new java.awt.Font("SimSun", 1, 18)); // NOI18N
         btnCadastro.setForeground(new java.awt.Color(255, 255, 255));
         btnCadastro.setText("Cadastrar-se");
         btnCadastro.setToolTipText("");
@@ -67,7 +67,7 @@ public class TelaInicialJF extends javax.swing.JFrame {
         });
 
         btnAcesso.setBackground(new java.awt.Color(0, 51, 51));
-        btnAcesso.setFont(new java.awt.Font("SimSun", 1, 14)); // NOI18N
+        btnAcesso.setFont(new java.awt.Font("SimSun", 1, 18)); // NOI18N
         btnAcesso.setForeground(new java.awt.Color(255, 255, 255));
         btnAcesso.setText("Acessar");
         btnAcesso.setToolTipText("");
@@ -88,7 +88,7 @@ public class TelaInicialJF extends javax.swing.JFrame {
                 .addComponent(btnCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAcesso, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(487, Short.MAX_VALUE))
+                .addContainerGap(834, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,22 +106,17 @@ public class TelaInicialJF extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 675, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(273, 273, 273))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(94, 94, 94))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(182, 182, 182))
+                .addGap(350, 350, 350)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 836, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(219, 219, 219)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 649, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(488, 488, 488)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,13 +124,12 @@ public class TelaInicialJF extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel3)
-                .addGap(32, 32, 32)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addContainerGap())
+                .addGap(66, 66, 66)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(123, 123, 123)
+                .addComponent(jLabel2))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -155,11 +149,13 @@ public class TelaInicialJF extends javax.swing.JFrame {
     private void btnAcessoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessoActionPerformed
         TelaLoginJD login = new TelaLoginJD(null, true);
         login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAcessoActionPerformed
 
     private void btnCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastroActionPerformed
         CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(null, true);
         cadastro.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCadastroActionPerformed
 
     public static void main(String args[]) {
