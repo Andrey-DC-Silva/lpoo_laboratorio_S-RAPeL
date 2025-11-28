@@ -195,6 +195,7 @@ public class TelaLoginJD extends javax.swing.JDialog {
         try {
             String cpf = txtCPF.getText();
             cpf = cpf.replace(".", "").replace("-", "").trim();
+            
             String senha = new String(pswSenha.getPassword());
             String hash = hashSenha(senha);
 
@@ -203,10 +204,9 @@ public class TelaLoginJD extends javax.swing.JDialog {
 
             if (user != null) {
                 JOptionPane.showMessageDialog(this, "Login efetuado com sucesso!");
-                dispose();
-
                 MenuJF menu = new MenuJF(user);
                 menu.setVisible(true);
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "CPF ou senha incorretos!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
@@ -223,11 +223,13 @@ public class TelaLoginJD extends javax.swing.JDialog {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(senha.getBytes());
+            
             StringBuilder sb = new StringBuilder();
             for (byte b : hash) {
                 sb.append(String.format("%02x", b));
             }
             return sb.toString();
+            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

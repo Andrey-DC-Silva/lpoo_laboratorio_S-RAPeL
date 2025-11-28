@@ -1,9 +1,10 @@
 package model.dao;
 
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import model.Experimento;
+import model.Pesquisador;
 import model.Projeto;
 
 public class ProjetoDAO extends PersistenciaJPA {
@@ -19,29 +20,56 @@ public class ProjetoDAO extends PersistenciaJPA {
             return null;
         }
     }
-    
-    public Optional<Projeto> buscarPorId(int id) {
+
+    public Projeto buscarProjetoCompleto(int id) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Projeto> query = em.createQuery(
-                    "SELECT p FROM Projeto p WHERE p.id = :id", Projeto.class);
-            query.setParameter("id", id);
-            return query.getResultList().stream().findFirst();
-        } finally {
-            em.close();
+            Projeto proj = em.find(Projeto.class, id);
+            if (proj != null) {
+                proj.getPesquisadores().size();
+                proj.getExperimentos().size();
+            }
+            return proj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
-    
-        public Optional<Projeto> buscarPorExperimentos(int id) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Projeto> query = em.createQuery(
-                "SELECT p FROM Projeto p LEFT JOIN FETCH p.experimentos WHERE p.id = :id", Projeto.class
-            );
-            query.setParameter("id", id);
-            return query.getResultList().stream().findFirst();
-        } finally {
-            em.close();
+
+    public void adicionarPesquisador(Projeto projeto, Pesquisador pesquisador) throws Exception {
+        if (!projeto.getPesquisadores().contains(pesquisador)) {
+            projeto.getPesquisadores().add(pesquisador);
+            persist(projeto);
+        } else {
+            throw new Exception("Pesquisador já está no projeto!");
+        }
+    }
+
+    public void removerPesquisador(Projeto projeto, Pesquisador pesquisador) throws Exception {
+        if (projeto.getPesquisadores().remove(pesquisador)) {
+            pesquisador.setProjeto(null);
+            persist(projeto);
+        } else {
+            throw new Exception("Pesquisador não pertence a este projeto!");
+        }
+    }
+
+    public void adicionarExperimento(Projeto projeto, Experimento experimento) throws Exception {
+        if (!projeto.getExperimentos().contains(experimento)) {
+            projeto.getExperimentos().add(experimento);
+            experimento.setProjeto(projeto);
+            persist(experimento);
+        } else {
+            throw new Exception("Experimento já está no projeto!");
+        }
+    }
+
+    public void removerExperimento(Projeto projeto, Experimento experimento) throws Exception {
+        if (projeto.getExperimentos().remove(experimento)) {
+            experimento.setProjeto(null);
+            persist(experimento);
+        } else {
+            throw new Exception("Experimento não pertence a este projeto!");
         }
     }
 

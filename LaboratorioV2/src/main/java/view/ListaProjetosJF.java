@@ -8,11 +8,10 @@ import model.dao.ProjetoDAO;
 
 public class ListaProjetosJF extends javax.swing.JFrame {
 
-    ProjetoDAO dao;
+    private ProjetoDAO dao = new ProjetoDAO();
 
     public ListaProjetosJF() {
         initComponents();
-        dao = new ProjetoDAO();
         loadTabela();
     }
 
@@ -33,7 +32,7 @@ public class ListaProjetosJF extends javax.swing.JFrame {
         btnGerenciarPesquisadores = new javax.swing.JButton();
         btnGerenciarExperimentos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -234,6 +233,7 @@ public class ListaProjetosJF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        
         CadastroProjetoJD cadastro = new CadastroProjetoJD(this, true);
         cadastro.setVisible(true);
 
@@ -247,46 +247,62 @@ public class ListaProjetosJF extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar projeto: " + ex.getMessage());
             }
         }
+        
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        
         int selectedRow = tblProjetos.getSelectedRow();
+        
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um projeto para editar.");
             return;
         }
 
         int id = (int) tblProjetos.getValueAt(selectedRow, 0);
-        Projeto proj = dao.buscarPorId(id).orElse(null);
+
+        Projeto proj = dao.buscarProjetoCompleto(id);
+
         if (proj == null) {
             JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
             return;
         }
 
-        CadastroProjetoJD telaEdicao = new CadastroProjetoJD(this, true);
-        telaEdicao.setProjeto(proj);
-        telaEdicao.setVisible(true);
+        CadastroProjetoJD cadastro = new CadastroProjetoJD(this, true);
+        cadastro.setProjeto(proj);
+        cadastro.setVisible(true);
 
         try {
-            dao.persist(telaEdicao.getProjeto());
+            dao.persist(cadastro.getProjeto());
             loadTabela();
             JOptionPane.showMessageDialog(this, "Projeto editado com sucesso.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar projeto: " + ex.getMessage());
         }
+        
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnInformacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacoesActionPerformed
+        
         if (tblProjetos.getSelectedRow() != -1) {
-            Projeto proj = (Projeto) dao.buscarPorId((int) tblProjetos.getModel().getValueAt(tblProjetos.getSelectedRow(), 0)).get();
-            JOptionPane.showMessageDialog(rootPane, proj.mostrarDados());
+            
+            int id = (int) tblProjetos.getModel().getValueAt(tblProjetos.getSelectedRow(), 0);
+            Projeto proj = dao.buscarProjetoCompleto(id);
+            
+            if (proj != null) {
+                JOptionPane.showMessageDialog(rootPane, proj.mostrarDados());
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Projeto não encontrado");
+            }
+            
         } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione um projeto");
         }
-
+        
     }//GEN-LAST:event_btnInformacoesActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        
         int selectedRow = tblProjetos.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um projeto para remover.");
@@ -294,44 +310,66 @@ public class ListaProjetosJF extends javax.swing.JFrame {
         }
 
         int id = (int) tblProjetos.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Deseja realmente remover o projeto?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION);
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente remover o projeto?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                dao.remover(id);
-                loadTabela();
-                JOptionPane.showMessageDialog(this, "Projeto removido com sucesso.");
+                Projeto proj = dao.buscarProjetoCompleto(id);
+                if (proj != null) {
+                    dao.remover(proj);
+                    loadTabela();
+                    JOptionPane.showMessageDialog(this, "Projeto removido com sucesso.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
+                }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao remover projeto: " + ex.getMessage());
+                ex.printStackTrace();
             }
         }
+        
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnGerenciarPesquisadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPesquisadoresActionPerformed
+        
         int selectedRow = tblProjetos.getSelectedRow();
+        
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um projeto para gerenciar pesquisadores.");
             return;
         }
-        int projetoId = (int) tblProjetos.getValueAt(selectedRow, 0);
-        Projeto proj = dao.buscarPorId(projetoId).orElse(null);
+        
+        int id = (int) tblProjetos.getValueAt(selectedRow, 0);
+
+        Projeto proj = dao.buscarProjetoCompleto(id);
+        
         if (proj == null) {
             JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
             return;
         }
+        
         ListaPesquisadoresJF listaPesquisadores = new ListaPesquisadoresJF(proj);
         listaPesquisadores.setVisible(true);
+        loadTabela();
+        
     }//GEN-LAST:event_btnGerenciarPesquisadoresActionPerformed
 
     private void btnGerenciarExperimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarExperimentosActionPerformed
+        
         int selectedRow = tblProjetos.getSelectedRow();
+        
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um projeto para gerenciar experimentos.");
             return;
         }
 
-        int projetoId = (int) tblProjetos.getValueAt(selectedRow, 0);
-        Projeto proj = dao.buscarPorId(projetoId).orElse(null);
+        int id = (int) tblProjetos.getValueAt(selectedRow, 0);
+
+        Projeto proj = dao.buscarProjetoCompleto(id);
+
         if (proj == null) {
             JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
             return;
@@ -339,6 +377,8 @@ public class ListaProjetosJF extends javax.swing.JFrame {
 
         ListaExperimentosJF listaExp = new ListaExperimentosJF(proj);
         listaExp.setVisible(true);
+        loadTabela();
+        
     }//GEN-LAST:event_btnGerenciarExperimentosActionPerformed
 
     private void loadTabela() {

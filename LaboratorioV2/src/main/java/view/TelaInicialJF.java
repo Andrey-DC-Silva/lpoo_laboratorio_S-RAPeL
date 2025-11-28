@@ -1,8 +1,8 @@
 package view;
 
-public class TelaInicial extends javax.swing.JFrame {
+public class TelaInicialJF extends javax.swing.JFrame {
 
-    public TelaInicial() {
+    public TelaInicialJF() {
         initComponents();
     }
 
@@ -155,19 +155,17 @@ public class TelaInicial extends javax.swing.JFrame {
     private void btnAcessoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessoActionPerformed
         TelaLoginJD login = new TelaLoginJD(null, true);
         login.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_btnAcessoActionPerformed
 
     private void btnCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastroActionPerformed
         CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(null, true);
         cadastro.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_btnCadastroActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaInicial().setVisible(true);
+                new TelaInicialJF().setVisible(true);
             }
         });
     }

@@ -2,23 +2,29 @@ package view;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Experimento;
 import model.Projeto;
 import model.dao.ExperimentoDAO;
+import model.dao.ProjetoDAO;
 
 public class ListaExperimentosJF extends javax.swing.JFrame {
 
     private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private Projeto projeto;
+    private ProjetoDAO projDAO = new ProjetoDAO();
     private List<Experimento> experimentos;
+    private ExperimentoDAO dao = new ExperimentoDAO();
 
     public ListaExperimentosJF(Projeto projeto) {
         this.projeto = projeto;
+        initComponents();
+        loadTabela();
+    }
+
+    public ListaExperimentosJF() {
+        this.projeto = null;
         initComponents();
         loadTabela();
     }
@@ -43,7 +49,7 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
         btnInformacoes = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -216,32 +222,72 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+
+        if (projeto != null) {
+            List<Experimento> todosExperimentos = dao.listaExperimentos();
+            Experimento selecionado = (Experimento) JOptionPane.showInputDialog(
+                    this,
+                    "Selecione um experimento para adicionar ao projeto:",
+                    "Adicionar Experimento ao Projeto",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    todosExperimentos.toArray(),
+                    null
+            );
+            if (selecionado != null) {
+                try {
+                    projDAO.adicionarExperimento(projeto, selecionado);
+                    loadTabela();
+                    JOptionPane.showMessageDialog(this, "Experimento adicionado ao projeto com sucesso.");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao adicionar experimento: " + ex.getMessage());
+                }
+            }
+            return;
+        }
+
         CadastroExperimentoJD dialog = new CadastroExperimentoJD(this, true, projeto);
         dialog.setVisible(true);
-        loadTabela();
+        Experimento e = dialog.getExperimento();
+        if (e != null) {
+            try {
+                dao.persist(e);
+                loadTabela();
+                JOptionPane.showMessageDialog(this, "Experimento adicionado com sucesso.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar experimento: " + ex.getMessage());
+            }
+        }
+
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int row = tblExperimentos.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione um equipamento para editar.");
+            JOptionPane.showMessageDialog(this, "Selecione um experimento para editar.");
             return;
         }
 
         int id = (int) tblExperimentos.getValueAt(row, 0);
-        ExperimentoDAO dao = new ExperimentoDAO();
+        Experimento experimento = dao.buscarPorId(id);
 
-        Optional<Experimento> optionalExperimento = dao.buscarPorId(id);
-
-        if (optionalExperimento.isPresent()) {
-            Experimento experimento = optionalExperimento.get();
-            CadastroExperimentoJD dialog = new CadastroExperimentoJD(this, true, projeto);
-            dialog.setExperimentoParaEditar(experimento);
-            dialog.setVisible(true);
-            loadTabela();
-        } else {
-            JOptionPane.showMessageDialog(this, "Experiemento não encontrado!");
+        if (experimento == null) {
+            JOptionPane.showMessageDialog(this, "Experimento não encontrado!");
+            return;
         }
+
+        CadastroExperimentoJD cadastro = new CadastroExperimentoJD(this, true, projeto);
+        cadastro.setExperimentoParaEditar(experimento);
+        cadastro.setVisible(true);
+
+        try {
+            dao.persist(cadastro.getExperimento());
+            loadTabela();
+            JOptionPane.showMessageDialog(this, "Pesquisador editado com sucesso.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar pesquisador: " + ex);
+        }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnInformacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacoesActionPerformed
@@ -250,16 +296,12 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione um experimento para ver informações.");
             return;
         }
-
         int id = (int) tblExperimentos.getValueAt(row, 0);
-
         ExperimentoDAO dao = new ExperimentoDAO();
-
-        Optional<Experimento> optionalExperimento = dao.buscarPorId(id);
-        if (optionalExperimento.isPresent()) {
-            Experimento e = optionalExperimento.get();
+        Experimento experimento = dao.buscarPorId(id);
+        if (experimento != null) {
             JOptionPane.showMessageDialog(this,
-                    "Experimento: " + e.mostrarDados() + "\n",
+                    "Experimento: " + experimento.mostrarDados() + "\n",
                     "Informações do Experimento",
                     JOptionPane.INFORMATION_MESSAGE
             );
@@ -269,28 +311,45 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInformacoesActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        int linha = tblExperimentos.getSelectedRow();
-        if (linha >= 0) {
-            int id = (int) tblExperimentos.getValueAt(linha, 0);
-            ExperimentoDAO dao = new ExperimentoDAO();
-            try {
-                dao.remover(id);
-            } catch (Exception ex) {
-                Logger.getLogger(ListaExperimentosJF.class.getName()).log(Level.SEVERE, null, ex);
+        int row = tblExperimentos.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um experimento para remover.");
+            return;
+        }
+
+        int id = (int) tblExperimentos.getValueAt(row, 0);
+
+        Experimento e = dao.buscarPorId(id);
+
+        if (e == null) {
+            JOptionPane.showMessageDialog(this, "Experimento não encontrado!");
+            return;
+        }
+
+        try {
+            if (projeto != null) {
+                projDAO.removerExperimento(projeto, e);
+            } else {
+                dao.remover(e);
             }
             loadTabela();
-            JOptionPane.showMessageDialog(this, "Experimento removido com sucesso.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um experimento para excluir.");
+            JOptionPane.showMessageDialog(this, "Experimento removido com sucesso!");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao remover experimento: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void loadTabela() {
         DefaultTableModel model = (DefaultTableModel) tblExperimentos.getModel();
         model.setRowCount(0);
-
         ExperimentoDAO dao = new ExperimentoDAO();
-        List<Experimento> lista = dao.listaPorProjeto(projeto.getId());
+        List<Experimento> lista;
+
+        if (projeto != null) {
+            lista = dao.listaPorProjeto(projeto.getId());
+        } else {
+            lista = dao.listaExperimentos();
+        }
 
         for (Experimento e : lista) {
             model.addRow(new Object[]{
@@ -301,7 +360,7 @@ public class ListaExperimentosJF extends javax.swing.JFrame {
             });
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnEditar;

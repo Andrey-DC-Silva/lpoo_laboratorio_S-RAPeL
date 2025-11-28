@@ -19,32 +19,16 @@ public class UsuariosDAO extends PersistenciaJPA {
         }
     }
 
-    public Optional<Usuarios> buscarPorId(int id) {
+    public Usuarios buscarPorId(int id) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Usuarios> query = em.createQuery(
-                    "SELECT u FROM Usuarios u WHERE u.id = :id", Usuarios.class);
-            query.setParameter("id", id);
-            return query.getResultList().stream().findFirst();
+            return em.find(Usuarios.class, id);
         } finally {
             em.close();
         }
     }
 
-    public Usuarios buscaPorIdSenha(int id, String hashSenha) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Usuarios> query = em.createQuery(
-                    "SELECT u FROM Usuarios u WHERE u.id = :id AND u.senha = :senha", Usuarios.class);
-            query.setParameter("id", id);
-            query.setParameter("senha", hashSenha);
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    public Usuarios buscarPorCpfESenha(String cpf, String hashSenha) {
+    public Usuarios buscarPorCpfESenha(String cpf, String senha) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuarios> query = em.createQuery(
@@ -52,7 +36,7 @@ public class UsuariosDAO extends PersistenciaJPA {
                     Usuarios.class
             );
             query.setParameter("cpf", cpf);
-            query.setParameter("senha", hashSenha);
+            query.setParameter("senha", senha);
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -60,4 +44,6 @@ public class UsuariosDAO extends PersistenciaJPA {
             em.close();
         }
     }
+    
+    
 }

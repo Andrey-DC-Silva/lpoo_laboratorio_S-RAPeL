@@ -100,8 +100,8 @@ public class Experimento implements Mostrar, Serializable {
         texto += "\nTítulo: " + titulo;
         texto += "\nDescrição: " + descricao;
         texto += "\nData de Realização: " + dtRealizacao.format(formato);
-        texto += "\nResponsável - ID: " + responsavel.getId() + " / " + (responsavel != null ? responsavel.getNome() : "Não definido");
-
+        texto += "\nResponsável - ID: " + (responsavel != null ? responsavel.getId() : "Não definido") +
+         " / " + (responsavel != null ? responsavel.getNome() : "Não definido");
         return texto;
     }
 

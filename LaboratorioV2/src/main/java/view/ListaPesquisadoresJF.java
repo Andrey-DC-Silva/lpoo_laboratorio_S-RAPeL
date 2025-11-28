@@ -1,30 +1,33 @@
 package view;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Pesquisador;
 import model.Projeto;
 import model.dao.PesquisadorDAO;
+import model.dao.ProjetoDAO;
 
 public class ListaPesquisadoresJF extends javax.swing.JFrame {
 
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private Projeto projeto;
-    private PesquisadorDAO dao;
+    private ProjetoDAO projetoDAO = new ProjetoDAO();
+
+    private PesquisadorDAO dao = new PesquisadorDAO();
 
     public ListaPesquisadoresJF(Projeto projeto) {
         this.projeto = projeto;
-        this.dao = new PesquisadorDAO();
         initComponents();
         loadTabela();
     }
 
     public ListaPesquisadoresJF() {
-        this.dao = new PesquisadorDAO();
         initComponents();
+        loadTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -42,7 +45,7 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
         btnInformacoes = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -159,19 +162,22 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(124, 124, 124)
                 .addComponent(jLabel26)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(32, 32, 32))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -212,15 +218,30 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        int selectedRow = tblPesquisadores.getSelectedRow();
-        if (selectedRow == -1) {
+        int row = tblPesquisadores.getSelectedRow();
+        if (row == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um pesquisador para remover.");
             return;
         }
 
-        int id = (int) tblPesquisadores.getValueAt(selectedRow, 0);
+        int id = (int) tblPesquisadores.getValueAt(row, 0);
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente remover o pesquisador?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (projeto != null) {
+            Pesquisador pesquisador = dao.buscarPorId(id);
+            try {
+                projetoDAO.removerPesquisador(projeto, pesquisador);
+                loadTabela();
+                JOptionPane.showMessageDialog(this, "Pesquisador removido do projeto com sucesso.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao remover pesquisador do projeto: " + ex.getMessage());
+            }
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Deseja remover o pesquisador " + id + "?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 dao.remover(id);
@@ -233,31 +254,46 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnInformacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacoesActionPerformed
-        if (tblPesquisadores.getSelectedRow() != -1) {
-            Pesquisador pesquisador = (Pesquisador) dao.buscarPorId((int) tblPesquisadores.getModel().getValueAt(tblPesquisadores.getSelectedRow(), 0)).get();
-            JOptionPane.showMessageDialog(rootPane, pesquisador.mostrarDados());
+        int row = tblPesquisadores.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um pesquisador");
+            return;
+        }
+        int id = (int) tblPesquisadores.getValueAt(row, 0);
+        Pesquisador pesquisador = dao.buscarPorId(id);
+        if (pesquisador != null) {
+            JOptionPane.showMessageDialog(this,
+                    "Pesquisador: " + pesquisador.mostrarDados() + "\n",
+                    "Informações do Pesquisador",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um pesquisador");
+            JOptionPane.showMessageDialog(this, "Pesquisador não encontrado.");
         }
     }//GEN-LAST:event_btnInformacoesActionPerformed
 
+
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int selectedRow = tblPesquisadores.getSelectedRow();
-        if (selectedRow == -1) {
+        int row = tblPesquisadores.getSelectedRow();
+        if (row == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um pesquisador para editar.");
             return;
         }
-        int id = (int) tblPesquisadores.getValueAt(selectedRow, 0);
-        Pesquisador pesquisador = dao.buscarPorId(id).orElse(null);
+
+        int id = (int) tblPesquisadores.getValueAt(row, 0);
+        Pesquisador pesquisador = dao.buscarPorId(id);
+
         if (pesquisador == null) {
             JOptionPane.showMessageDialog(this, "Pesquisador não encontrado.");
             return;
         }
-        CadastroPesquisadorJD telaEdicao = new CadastroPesquisadorJD(this, true);
-        telaEdicao.setPesquisadorParaEditar(pesquisador);
-        telaEdicao.setVisible(true);
+
+        CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(this, true);
+        cadastro.setPesquisadorParaEditar(pesquisador);
+        cadastro.setVisible(true);
+
         try {
-            dao.persist(telaEdicao.getPesquisador());
+            dao.persist(cadastro.getPesquisador());
             loadTabela();
             JOptionPane.showMessageDialog(this, "Pesquisador editado com sucesso.");
         } catch (Exception ex) {
@@ -265,11 +301,39 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
+
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+
+        if (projeto != null) {
+            List<Pesquisador> todosPesquisadores = dao.listaPesquisadores();
+
+            Pesquisador selecionado = (Pesquisador) JOptionPane.showInputDialog(
+                    this,
+                    "Selecione um pesquisador para adicionar ao projeto:",
+                    "Adicionar Pesquisador ao Projeto",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    todosPesquisadores.toArray(),
+                    null
+            );
+
+            if (selecionado != null) {
+                projeto.adicionarPesquisador(selecionado);
+                try {
+                    projetoDAO.persist(projeto);
+                    loadTabela();
+                    JOptionPane.showMessageDialog(this, "Pesquisador adicionado ao projeto com sucesso.");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar projeto: " + ex.getMessage());
+                }
+            }
+            return;
+        }
+
         CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(this, true);
         cadastro.setVisible(true);
-
         Pesquisador pesquisador = cadastro.getPesquisador();
+
         if (pesquisador != null) {
             try {
                 dao.persist(pesquisador);
@@ -279,14 +343,21 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar pesquisador: " + ex.getMessage());
             }
         }
+
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void loadTabela() {
         List<Pesquisador> pesquisadores;
-        if (projeto == null) {
-            pesquisadores = dao.listaPesquisadores();
+
+        if (projeto != null) {
+            Projeto projetoCompleto = projetoDAO.buscarProjetoCompleto(projeto.getId());
+            if (projetoCompleto != null) {
+                pesquisadores = projetoCompleto.getPesquisadores();
+            } else {
+                pesquisadores = new ArrayList<>();
+            }
         } else {
-            pesquisadores = dao.listaPorProjeto(projeto.getId());
+            pesquisadores = dao.listaPesquisadores();
         }
 
         DefaultTableModel model = (DefaultTableModel) tblPesquisadores.getModel();
@@ -295,8 +366,8 @@ public class ListaPesquisadoresJF extends javax.swing.JFrame {
             model.addRow(new Object[]{
                 p.getId(),
                 p.getNome(),
-                p.getDtNasc().format(formato),
-                p.getAreaAtuacao()
+                p.getDtNasc() != null ? p.getDtNasc().format(formato) : "",
+                p.getAreaAtuacao() != null ? p.getAreaAtuacao() : ""
             });
         }
     }

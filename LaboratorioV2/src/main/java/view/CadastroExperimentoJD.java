@@ -32,6 +32,18 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         btnCadastrar1.setText("Atualizar");
     }
 
+    public Experimento getExperimento() {
+        if (experimento == null) {
+            experimento = new Experimento();
+        }
+        experimento.setTitulo(txtTitulo1.getText().trim());
+        experimento.setDescricao(txtDescricao1.getText().trim());
+        experimento.setDtRealizacao(LocalDate.parse(txtData1.getText().trim(), formato));
+        experimento.setResponsavel((Pesquisador) cmbResponsavel1.getSelectedItem());
+
+        return experimento;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,6 +64,8 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         cmbResponsavel1 = new javax.swing.JComboBox<>();
         jLabel43 = new javax.swing.JLabel();
         txtDescricao1 = new javax.swing.JTextField();
+        jLabel42 = new javax.swing.JLabel();
+        cmbProjeto = new javax.swing.JComboBox<>();
         jLabel32 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -159,6 +173,15 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
         txtDescricao1.setForeground(new java.awt.Color(0, 153, 51));
         txtDescricao1.setSelectionColor(new java.awt.Color(0, 102, 102));
 
+        jLabel42.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel42.setFont(new java.awt.Font("SimSun-ExtB", 1, 18)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Projeto:");
+
+        cmbProjeto.setBackground(new java.awt.Color(51, 51, 51));
+        cmbProjeto.setFont(new java.awt.Font("SimSun", 0, 14)); // NOI18N
+        cmbProjeto.setForeground(new java.awt.Color(0, 102, 51));
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -177,6 +200,7 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
                         .addGap(0, 33, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCadastrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -185,16 +209,19 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addComponent(jLabel39)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtTitulo1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(66, 66, 66)
-                                .addComponent(jLabel41)
+                                        .addComponent(txtTitulo1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addComponent(jLabel40)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtData1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(46, 46, 46)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel41)
+                                    .addComponent(jLabel42))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbResponsavel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnCadastrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel40)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtData1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbResponsavel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(93, 93, 93)
@@ -217,7 +244,9 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtData1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel40))
+                    .addComponent(jLabel40)
+                    .addComponent(jLabel42)
+                    .addComponent(cmbProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel43)
@@ -326,10 +355,11 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
             cmbResponsavel1.addItem(p);
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar1;
     private javax.swing.JButton btnCancelar1;
+    private javax.swing.JComboBox<Pesquisador> cmbProjeto;
     private javax.swing.JComboBox<Pesquisador> cmbResponsavel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
@@ -338,6 +368,7 @@ public class CadastroExperimentoJD extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;

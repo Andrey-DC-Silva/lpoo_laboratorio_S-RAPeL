@@ -34,10 +34,10 @@ public class Projeto implements Mostrar, Serializable {
     @Column(name = "proj_status")
     private String status;
 
-    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "projeto", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}) 
     private List<Pesquisador> pesquisadores = new ArrayList<>();
 
-    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "projeto", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Experimento> experimentos = new ArrayList<>();
 
     public Projeto() {

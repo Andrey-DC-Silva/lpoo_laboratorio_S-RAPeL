@@ -14,6 +14,7 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private Pesquisador pesquisador;
+    private Usuarios usuario;
 
     public CadastroPesquisadorJD(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -34,7 +35,7 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
             this.pesquisador = new Pesquisador();
         }
     }
-    
+
     public void setPesquisadorParaEditar(Pesquisador pesquisador) {
         this.pesquisador = pesquisador;
         txtNome.setText(pesquisador.getNome());
@@ -44,7 +45,7 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         txtArea.setText(pesquisador.getAreaAtuacao());
         pswSenha.setText("");
     }
-    
+
     public Pesquisador getPesquisador() {
         if (pesquisador == null) {
             pesquisador = new Pesquisador();
@@ -66,6 +67,25 @@ public class CadastroPesquisadorJD extends javax.swing.JDialog {
         pesquisador.setUsuario(usuario);
 
         return pesquisador;
+    }
+
+    public Usuarios getUsuario() {
+        if (pesquisador == null) {
+            pesquisador = new Pesquisador();
+        }
+
+        Usuarios usuario = pesquisador.getUsuario();
+        if (usuario == null) {
+            usuario = new Usuarios();
+            pesquisador.setUsuario(usuario);
+        }
+
+        String senha = new String(pswSenha.getPassword());
+        if (!senha.isBlank()) {
+            usuario.setSenha(hashSenha(senha));
+        }
+
+        return usuario;
     }
 
     @SuppressWarnings("unchecked")

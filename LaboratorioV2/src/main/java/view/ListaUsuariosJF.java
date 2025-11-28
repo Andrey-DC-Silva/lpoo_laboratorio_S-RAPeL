@@ -1,16 +1,16 @@
 package view;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Usuarios;
 import model.dao.UsuariosDAO;
+import view.CadastroPesquisadorJD;
 
 public class ListaUsuariosJF extends javax.swing.JFrame {
 
+    private UsuariosDAO dao = new UsuariosDAO();
+    
     public ListaUsuariosJF() {
         initComponents();
         loadTabela();
@@ -31,7 +31,7 @@ public class ListaUsuariosJF extends javax.swing.JFrame {
         btnRemover = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -216,17 +216,25 @@ public class ListaUsuariosJF extends javax.swing.JFrame {
         int id = (int) tblUsuarios.getValueAt(row, 0);
         UsuariosDAO dao = new UsuariosDAO();
 
-        Optional<Usuarios> optionalUsuario = dao.buscarPorId(id);
+        Usuarios usuario = dao.buscarPorId(id);
 
-        if (optionalUsuario.isPresent()) {
-            Usuarios u = optionalUsuario.get();
-            CadastroPesquisadorJD dialog = new CadastroPesquisadorJD(this, true);
-            dialog.setPesquisadorParaEditar(u);
-            dialog.setVisible(true);
-            loadTabela();
-        } else {
+        if (usuario == null) {
             JOptionPane.showMessageDialog(this, "Usuário não encontrado!");
+            return;
         }
+
+        CadastroPesquisadorJD cadastro = new CadastroPesquisadorJD(this, true);
+        cadastro.setPesquisadorParaEditar(usuario);
+        cadastro.setVisible(true);
+
+        try {
+            dao.persist(cadastro.getUsuario());
+            loadTabela();
+            JOptionPane.showMessageDialog(this, "Usuario editado com sucesso.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar Usuario: " + ex);
+        }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
@@ -238,21 +246,18 @@ public class ListaUsuariosJF extends javax.swing.JFrame {
 
         int id = (int) tblUsuarios.getValueAt(row, 0);
 
-        if (JOptionPane.showConfirmDialog(
-                this,
-                "Deseja realmente remover o usuário ID " + id + "?",
-                "Confirmar remoção",
-                JOptionPane.YES_NO_OPTION
-        ) == JOptionPane.YES_OPTION) {
-
-            UsuariosDAO dao = new UsuariosDAO();
-
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Deseja remover o usuario " + id + "?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
             try {
                 dao.remover(id);
+                loadTabela();
+                JOptionPane.showMessageDialog(this, "Usuario removido com sucesso.");
             } catch (Exception ex) {
-                Logger.getLogger(ListaUsuariosJF.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Erro ao remover usuario: " + ex.getMessage());
             }
-            loadTabela();
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
@@ -264,7 +269,7 @@ public class ListaUsuariosJF extends javax.swing.JFrame {
 
         for (Usuarios u : lista) {
             String nome = u.getPesquisador() != null ? u.getPesquisador().getNome() : "(sem nome)";
-            model.addRow(new Object[]{ u.getId(), nome });
+            model.addRow(new Object[]{u.getId(), nome});
         }
     }
 

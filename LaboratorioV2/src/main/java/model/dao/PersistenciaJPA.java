@@ -33,22 +33,39 @@ public class PersistenciaJPA implements InterfaceBD {
         return em.find(c, id);
     }
 
+//    @Override
+//    public void persist(Object o) throws Exception {
+//        entity = getEntityManager();
+//        try {
+//            entity.getTransaction().begin();
+//            if (entity.contains(o)) {
+//            } else {
+//                entity.merge(o);
+//            }
+//            entity.getTransaction().commit();
+//        } catch (Exception e) {
+//            if (entity.getTransaction().isActive()) {
+//                entity.getTransaction().rollback();
+//            }
+//            Logger.getLogger(PersistenciaJPA.class.getName())
+//                    .log(Level.SEVERE, "Erro ao persistir a entidade: " + o.getClass().getSimpleName(), e);
+//            throw e;
+//        }
+//    }
+
     @Override
     public void persist(Object o) throws Exception {
         entity = getEntityManager();
         try {
             entity.getTransaction().begin();
-            if (!entity.contains(o)) {
-                o = entity.merge(o);
-            }
-            entity.persist(o);
+            entity.merge(o);
             entity.getTransaction().commit();
         } catch (Exception e) {
             if (entity.getTransaction().isActive()) {
                 entity.getTransaction().rollback();
             }
-            Logger.getLogger(PersistenciaJPA.class.getName()).log(Level.SEVERE, "Erro ao persistir a entidade: " + o.getClass().getSimpleName(), e);
-            e.printStackTrace();
+            Logger.getLogger(PersistenciaJPA.class.getName())
+                    .log(Level.SEVERE, "Erro ao salvar ou atualizar a entidade: " + o.getClass().getSimpleName(), e);
             throw e;
         }
     }

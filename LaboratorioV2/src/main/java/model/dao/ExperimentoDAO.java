@@ -1,7 +1,6 @@
 package model.dao;
 
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import model.Experimento;
@@ -20,13 +19,10 @@ public class ExperimentoDAO extends PersistenciaJPA {
         }
     }
 
-    public Optional<Experimento> buscarPorId(int id) {
+    public Experimento buscarPorId(int id) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Experimento> query = em.createQuery(
-                    "SELECT ex FROM Experimento ex WHERE ex.id = :id", Experimento.class);
-            query.setParameter("id", id);
-            return query.getResultList().stream().findFirst();
+            return em.find(Experimento.class, id);
         } finally {
             em.close();
         }
