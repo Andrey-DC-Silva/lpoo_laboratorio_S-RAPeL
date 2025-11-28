@@ -84,4 +84,4 @@ Repositório no git:
  - Está definido como update em relação à criação, mantimento e alteração dos dados no banco
 
 ## Diagrama de Relações
-![Diagrama de Classes do Sis-RAPeL](imagens/diagrama.png)
+![Diagrama de Classes do Sis-RAPeL](diagrama.png)
